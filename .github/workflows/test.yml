@@ -1,6 +1,6 @@
 # .github/workflows/test.yml
 
-name: Run Tests
+name: Run Tests with Secrets
 
 # This workflow runs when you push code or create a pull request
 on:
@@ -17,6 +17,10 @@ jobs:
     # strategy:
     #   matrix:
     #     python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    env:
+      DEBUG_MODE: "true"
+      DATABASE_URL: "sqlite:///test.db"
 
     steps:
       # Get the code from your repository
@@ -44,6 +48,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Run the tests
+      # Run the tests with secrets
       - name: Run pytest
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: pytest -v
